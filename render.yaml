@@ -17,10 +17,7 @@ services:
       - key: JWT_EXPIRES_IN
         value: 7d
       - key: DB_PATH
-        value: /var/data/finance.db
+        value: ./data/finance.db
       - key: CORS_ORIGIN
         sync: false
-    disk:
-      name: finance-data
-      mountPath: /var/data
-      sizeGB: 1
+ 
