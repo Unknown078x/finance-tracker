@@ -1,0 +1,26 @@
+# Render.com blueprint — deploy the backend as a web service with a persistent
+# disk for the SQLite file. Push this repo to GitHub, then in Render choose
+# "New > Blueprint" and point it at the repo.
+services:
+  - type: web
+    name: finance-tracker-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node src/server.js
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: DB_PATH
+        value: /var/data/finance.db
+      - key: CORS_ORIGIN
+        sync: false
+    disk:
+      name: finance-data
+      mountPath: /var/data
+      sizeGB: 1

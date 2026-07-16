@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET:-change-this-to-a-long-random-string}
+      - JWT_EXPIRES_IN=7d
+      - DB_PATH=/app/data/finance.db
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:8080}
+    volumes:
+      - finance-data:/app/data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: /api
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  finance-data:
